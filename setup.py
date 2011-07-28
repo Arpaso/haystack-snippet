@@ -17,7 +17,7 @@ install_requires = [
 ]
 
 #Execute function to handle setuptools functionality
-setup(name="haystack-snippet",
+setup(name="haystack_snippet",
     version="0.1",
     description="Django application for using haystack search",
     long_description=read('README'),
