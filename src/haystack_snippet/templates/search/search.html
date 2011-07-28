@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{# just an example template #}
+
+{% block content %}
+  <h2>
+      {% blocktrans with search_term as search_term %}
+        Search results for "<b>{{ search_term }}</b>"
+      {% endblocktrans %}
+  </h2>
+  {% include page_template %}
+{% endblock %}

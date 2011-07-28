@@ -1,0 +1,16 @@
+{% load endless i18n %}
+{% paginate object_list %}
+
+{# just an example template #}
+
+{% for result_obj in object_list %}
+  <div>
+    <a href="{{ result_obj.object.get_absolute_url }}">{{ result_obj.object }}</a>
+  </div>
+{% empty %}
+  <div>
+    {% trans "No results" %}
+  </div>
+{% endfor %}
+
+{% show_more _("Load more results") _("Wait... Loading of following results is being done ...") %}
