@@ -13,7 +13,8 @@ def read(fname):
 install_requires = [
         'setuptools',
         'Django',
-        'django-haystack==1.2'
+        'django-haystack==1.2',
+        'django-pagination'
 ]
 
 #Execute function to handle setuptools functionality

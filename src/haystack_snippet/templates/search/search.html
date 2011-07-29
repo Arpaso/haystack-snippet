@@ -1,13 +1,23 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load pagination_tags i18n %}
 
 {# just an example template #}
 
 {% block content %}
   <h2>
-      {% blocktrans with search_term as search_term %}
-        Search results for "<b>{{ search_term }}</b>"
-      {% endblocktrans %}
+    {% blocktrans with search_term as search_term %}
+      Search results for "<b>{{ search_term }}</b>"
+    {% endblocktrans %}
   </h2>
-  {% include page_template %}
+  {% autopaginate object_list %}
+  {% for result_obj in object_list %}
+    <div>
+      <a href="{{ result_obj.object.get_absolute_url }}">{{ result_obj.object }}</a>
+    </div>
+  {% empty %}
+    <div>
+      {% trans "No results" %}
+    </div>
+  {% endfor %}
+  {% paginate %}
 {% endblock %}
