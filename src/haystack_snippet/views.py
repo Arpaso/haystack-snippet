@@ -65,7 +65,7 @@ class HaystackSearchView(SearchView):
         """
         
         context = {
-            'object_list': tuple(self.results), #It's a HACK, because endless paginator does not work properly
+            'object_list': self.results, #It's a HACK, because endless paginator does not work properly
             'search_term': self.query,
         }
 
