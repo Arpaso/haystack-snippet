@@ -12,8 +12,9 @@ from .models import SearchLogger
 
 
 class HaystackSearchView(SearchView):
-
-
+    
+    detranslify = True
+    
     def get_results(self):
         """
         Fetches the results via the form.
@@ -35,12 +36,13 @@ class HaystackSearchView(SearchView):
             if not created:
                 search_logger.counter += 1
                 search_logger.save()
+        
+        if self.detranslify:
+            #Check latin letters and detranslit them
+            query_rus = detranslify(query)
 
-        #Check latin letters and detranslit them
-        query_rus = detranslify(query)
-
-        if query != query_rus:
-            query = "%s %s" % (query, query_rus,)
+            if query != query_rus:
+                query = "%s %s" % (query, query_rus,)
 
         sqs = self.form.searchqueryset
 
