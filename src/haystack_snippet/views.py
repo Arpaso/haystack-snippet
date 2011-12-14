@@ -44,7 +44,10 @@ class HaystackSearchView(SearchView):
             if query != query_rus:
                 query = "%s %s" % (query, query_rus,)
 
-        sqs = self.form.searchqueryset.filter(title=query)
+        if query:
+            sqs = self.form.searchqueryset.filter(title=query)
+        else:
+            sqs = self.form.searchqueryset.all()
 
         for word in iter(set(query.split())):
             sqs = sqs.filter_or(title=word).filter_or(text=word)
