@@ -2,10 +2,12 @@
 
 from datetime import timedelta, datetime, date
 
+from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 from pytils.translit import detranslify
 from haystack.views import SearchView
+from haystack.query import RelatedSearchQuerySet, SearchQuerySet
 
 from .utils import replace_special
 from .models import SearchLogger
@@ -14,6 +16,21 @@ from .models import SearchLogger
 class HaystackSearchView(SearchView):
     
     detranslify = True
+    searchqueryset = SearchQuerySet()
+    
+    def __init__(self, template=None, load_all=True, form_class=None, context_class=RequestContext, results_per_page=None):
+        self.load_all = load_all
+        self.form_class = form_class
+        self.context_class = context_class
+        
+        if form_class is None:
+            self.form_class = ModelSearchForm
+        
+        if not results_per_page is None:
+            self.results_per_page = results_per_page
+        
+        if template:
+            self.template = template
     
     def get_results(self):
         """
@@ -45,9 +62,9 @@ class HaystackSearchView(SearchView):
                 query = "%s %s" % (query, query_rus,)
 
         if query:
-            sqs = self.form.searchqueryset.filter(title=query)
+            sqs = self.searchqueryset.filter(title=query)
         else:
-            sqs = self.form.searchqueryset.all()
+            sqs = self.searchqueryset.all()
 
         for word in iter(set(query.split())):
             sqs = sqs.filter_or(title=word).filter_or(text=word)
@@ -108,5 +125,5 @@ class HaystackSearchView(SearchView):
 
         if self.searchqueryset is not None:
             kwargs['searchqueryset'] = self.searchqueryset
-
-        return self.form_class(data, **kwargs)
+        
+        return self.form_class(data=data, **kwargs)
