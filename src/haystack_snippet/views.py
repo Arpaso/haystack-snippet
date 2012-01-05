@@ -60,7 +60,7 @@ class HaystackSearchView(SearchView):
                 query = "%s %s" % (query, query_rus,)
                 
         if query:
-            sqs = self.searchqueryset.auto_query(query)
+            sqs = self.searchqueryset().auto_query(query)
         else:
             sqs = self.searchqueryset().all()
         
