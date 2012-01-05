@@ -4,7 +4,9 @@ from haystack.query import RelatedSearchQuerySet as RelatedSearchQuerySetOld
 
 class RelatedSearchQuerySet(RelatedSearchQuerySetOld):
     
-    _count = None
+    def __init__(self, site=None, query=None):
+        super(RelatedSearchQuerySet, self).__init__(site=site, query=query)
+        self._count = None
     
     def _get_count(self):
         """Returns the total number of matching results."""
@@ -36,11 +38,8 @@ class RelatedSearchQuerySet(RelatedSearchQuerySetOld):
     
     
     def __len__(self):
-        if self._count is None:
-            self._count = self._get_count()
+        #if self._count is None:
+        #    self._count = self._get_count()
 
-            # Some backends give weird, false-y values here. Convert to zero.
-            if not self._count:
-                self._count = 0
-
-        return self._count
+        #return self._count
+        return self._get_count()
