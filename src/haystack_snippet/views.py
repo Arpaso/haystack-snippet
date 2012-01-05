@@ -39,7 +39,7 @@ class HaystackSearchView(SearchView):
 
         Returns an empty list if there's no query to search with.
         """
-        if not self.form.is_valid():
+        if not (self.form.is_valid() and self.form.cleaned_data['q']):
             return self.form.no_query_found()
 
         query = self.form.cleaned_data['q']
