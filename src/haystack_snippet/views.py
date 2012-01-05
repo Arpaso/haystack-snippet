@@ -17,7 +17,7 @@ from .models import SearchLogger
 class HaystackSearchView(SearchView):
     
     detranslify = True
-    searchqueryset = SearchQuerySet()
+    searchqueryset = SearchQuerySet
     
     def __init__(self, template=None, load_all=True, form_class=None, context_class=RequestContext, results_per_page=None):
         self.load_all = load_all
@@ -60,9 +60,9 @@ class HaystackSearchView(SearchView):
                 query = "%s %s" % (query, query_rus,)
 
         if query:
-            sqs = self.searchqueryset.filter(title=query)
+            sqs = self.searchqueryset().filter(title=query)
         else:
-            sqs = self.searchqueryset.all()
+            sqs = self.searchqueryset().all()
 
         for word in iter(set(query.split())):
             sqs = sqs.filter_or(title=word).filter_or(text=word)
