@@ -58,14 +58,21 @@ class HaystackSearchView(SearchView):
 
             if query != query_rus:
                 query = "%s %s" % (query, query_rus,)
-
+                
         if query:
-            sqs = self.searchqueryset().filter(title=query)
+            sqs = self.searchqueryset.auto_query(query)
         else:
             sqs = self.searchqueryset().all()
+        
+        #=======================================================================
+        # if query:
+        #    sqs = self.searchqueryset().filter(title=query)
+        # else:
+        #    sqs = self.searchqueryset().all()
+        #=======================================================================
 
-        for word in iter(set(query.split())):
-            sqs = sqs.filter_or(title=word).filter_or(text=word)
+        #for word in iter(set(query.split())):
+        #    sqs = sqs.filter_or(title=word).filter_or(text=word)
 
         if self.load_all:
             sqs = sqs.load_all()
