@@ -11,7 +11,7 @@ class RelatedSearchQuerySet(RelatedSearchQuerySetOld):
     def _get_count(self):
         """Returns the total number of matching results."""
         results = self.query.get_results()
-        raise TypeError(len(list(results)))
+        raise AttributeError(len(results))
         # Remember the search position for each result so we don't have to resort later.
         models_pks = {}
         for result in results:
