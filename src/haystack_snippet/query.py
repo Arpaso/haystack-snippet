@@ -11,23 +11,23 @@ class RelatedSearchQuerySet(RelatedSearchQuerySetOld):
     def _get_count(self):
         """Returns the total number of matching results."""
         results = self.query.get_results()
-        raise AttributeError(len(results))
+        
         # Remember the search position for each result so we don't have to resort later.
         models_pks = {}
         for result in results:
             models_pks.setdefault(result.model, []).append(result.pk)
         
         total = 0
-        for model in models_pks:
+        for model, objects in models_pks.items():
             for model in models_pks:
                 if model in self._load_all_querysets:
                     # Use the overriding queryset.
-                    total += self._load_all_querysets[model].filter(pk__in=models_pks[model]).count()
+                    total += self._load_all_querysets[model].filter(pk__in=objects).count()
                 else:
                     # Check the SearchIndex for the model for an override.
                     try:
                         qs = self.site.get_index(model).load_all_queryset()
-                        total += qs.filter(pk__in=models_pks[model]).count()
+                        total += qs.filter(pk__in=objects).count()
                     except NotRegistered:
                         # The model returned doesn't seem to be registered with
                         # the current site. We should silently fail and populate
