@@ -37,7 +37,7 @@ class RelatedSearchQuerySet(RelatedSearchQuerySetOld):
         return total
     
     
-    def __len__(self):
+    def count(self):
         #if self._count is None:
         #    self._count = self._get_count()
 
