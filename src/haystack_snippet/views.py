@@ -4,6 +4,7 @@ from datetime import timedelta, datetime, date
 
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.db.models import F
 
 from pytils.translit import detranslify
 from haystack.views import SearchView
@@ -49,10 +50,7 @@ class HaystackSearchView(SearchView):
 
         # save the query to statistic
         if 'page' not in self.request.GET and query:
-            search_logger, created = SearchLogger.objects.get_or_create(text=query)
-            if not created:
-                search_logger.counter += 1
-                search_logger.save()
+            rows = SearchLogger.objects.filter(text=query).update(counter=F('counter')+1)
         
         if self.detranslify:
             #Check latin letters and detranslit them
