@@ -51,6 +51,8 @@ class HaystackSearchView(SearchView):
         # save the query to statistic
         if 'page' not in self.request.GET and query:
             rows = SearchLogger.objects.filter(text=query).update(counter=F('counter')+1)
+            if not rows:
+                SearchLogger.objects.create(text=query)
         
         if self.detranslify:
             #Check latin letters and detranslit them
