@@ -12,6 +12,7 @@ from haystack.query import RelatedSearchQuerySet, SearchQuerySet
 
 from .utils import replace_special
 from .models import SearchLogger
+from .forms import HaystackSearchForm
 
 
 class HaystackSearchView(SearchView):
@@ -25,7 +26,7 @@ class HaystackSearchView(SearchView):
         self.context_class = context_class
         
         if form_class is None:
-            self.form_class = ModelSearchForm
+            self.form_class = HaystackSearchForm
         
         if not results_per_page is None:
             self.results_per_page = results_per_page
@@ -87,7 +88,7 @@ class HaystackSearchView(SearchView):
         """
         
         context = {
-            'object_list': self.results, #It's a HACK, because endless paginator does not work properly
+            'object_list': self.results,
             'search_term': self.query,
         }
 
