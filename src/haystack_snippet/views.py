@@ -5,6 +5,7 @@ from datetime import timedelta, datetime, date
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.db.models import F
+from django.conf import settings
 
 from pytils.translit import detranslify
 from haystack.views import SearchView
@@ -14,10 +15,11 @@ from .utils import replace_special
 from .models import SearchLogger
 from .forms import HaystackSearchForm
 
+DETRANSLIFY_SEARCH_QUERY = getattr(settings, 'DETRANSLIFY_SEARCH_QUERY', True)
 
 class HaystackSearchView(SearchView):
     
-    detranslify = True
+    detranslify = DETRANSLIFY_SEARCH_QUERY
     searchqueryset = SearchQuerySet
     
     def __init__(self, template=None, load_all=True, form_class=None, context_class=RequestContext, results_per_page=None):
@@ -62,10 +64,7 @@ class HaystackSearchView(SearchView):
             if query != query_rus:
                 query = "%s %s" % (query, query_rus,)
                 
-        if query:
-            sqs = self.searchqueryset().auto_query(query)
-        else:
-            sqs = self.searchqueryset().all()
+        sqs = self.searchqueryset().auto_query(query)
         
         #=======================================================================
         # if query:
@@ -79,7 +78,7 @@ class HaystackSearchView(SearchView):
 
         if self.load_all:
             sqs = sqs.load_all()
-
+        
         return sqs
 
     def create_response(self):
