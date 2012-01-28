@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<form action='{% url haystack_search %}' class="search_form">
+  <fieldset>
+    <input type="text" id="searchGadget" title='{% trans "Поиск на сайте" %}' placeholder='{% trans "Введите название" %}' size="18" name="search-q" autocomplete="off"
+            class="keyboardInput" value='{{ search_term }}' />
+    <button type="submit" class="button searchButton"><span>{% trans "Поиск" %}</span></button>
+  </fieldset>
+</form>
