@@ -16,6 +16,8 @@ from .models import SearchLogger
 from .forms import HaystackSearchForm
 
 DETRANSLIFY_SEARCH_QUERY = getattr(settings, 'DETRANSLIFY_SEARCH_QUERY', True)
+DEFAULT_PREFIX = getattr(settings, 'DEFAULT_SEARCH_PREFIX', 'search')
+
 
 class HaystackSearchView(SearchView):
     
@@ -122,7 +124,7 @@ class HaystackSearchView(SearchView):
         data = None
         kwargs = {
             'load_all': self.load_all,
-            'prefix': 'search'
+            'prefix': DEFAULT_PREFIX
         }
         if form_kwargs:
             kwargs.update(form_kwargs)
