@@ -1,0 +1,26 @@
+{% load i18n %}
+
+<div id="portal-searchbox">
+  <form method="GET" action='{% url haystack_search %}' class="search_form">
+    <fieldset>
+      <input type="text" id="{{ search_form.q.auto_id }}" title='{% trans "Search the site" %}' placeholder='{% trans "Input name" %}' 
+             name="{{ search_form.prefix }}-{{ search_form.q.name }}" class="keyboardInput" 
+             value='{% if search_form.q.value %}{{ search_form.q.value }}{% else %}{%endif%}' />
+      <button type="submit" class="button searchButton"><span>{% trans "Search" %}</span></button>
+    </fieldset>
+  </form>
+</div>
+
+<script type="text/javascript">//<![CDATA[
+$(document).ready(function() {
+  $('.search_form').validate({
+    focusInvalid: true,
+    errorPlacement: function(label, element){
+      false;
+    }
+  });
+  $('#{{ search_form.q.auto_id }}').rules('add', {
+      required: true,
+  });
+});
+//]]></script>
