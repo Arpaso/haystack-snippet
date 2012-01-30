@@ -5,7 +5,7 @@
     <fieldset>
       <input type="text" id="{{ search_form.q.auto_id }}" title='{% trans "Search the site" %}' placeholder='{% trans "Input name" %}' 
              name="{{ search_form.prefix }}-{{ search_form.q.name }}" class="keyboardInput" 
-             value='{{ search_form.q.value }}' />
+             value='{% if search_form.q.value %}{{ search_form.q.value }}{% else %}{%endif%}' />
       <button type="submit" class="button searchButton"><span>{% trans "Search" %}</span></button>
     </fieldset>
   </form>
@@ -22,6 +22,5 @@ $(document).ready(function() {
   $('#{{ search_form.q.auto_id }}').rules('add', {
       required: true,
   });
-  alert("Valid: " + $('.search_form').valid());
 });
 //]]></script>
