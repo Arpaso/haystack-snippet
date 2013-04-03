@@ -9,7 +9,7 @@ from django.conf import settings
 
 from pytils.translit import detranslify, translify
 from haystack.views import SearchView
-from haystack.query import RelatedSearchQuerySet, SearchQuerySet
+from haystack.query import RelatedSearchQuerySet, SearchQuerySet, SQ
 
 from .utils import replace_special
 from .models import SearchLogger
