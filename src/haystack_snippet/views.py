@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response
 from django.db.models import F
 from django.conf import settings
 
-from pytils.translit import detranslify
+from pytils.translit import detranslify, translify
 from haystack.views import SearchView
 from haystack.query import RelatedSearchQuerySet, SearchQuerySet
 
@@ -49,7 +49,6 @@ class HaystackSearchView(SearchView):
 
         query = self.form.cleaned_data['q']
 
-
         #Replace letter ё --> е
         query = replace_special(query)
 
@@ -59,25 +58,16 @@ class HaystackSearchView(SearchView):
             if not rows:
                 SearchLogger.objects.create(text=query)
         
-        if self.detranslify:
-            #Check latin letters and detranslit them
-            query_rus = detranslify(query)
-
-            if query != query_rus:
-                query = "%s %s" % (query, query_rus,)
-                
-        sqs = self.searchqueryset().auto_query(query)
+        translited_query = translify(query)
+        detranslited_query = detranslify(query).encode('utf-8')
         
-        #=======================================================================
-        # if query:
-        #    sqs = self.searchqueryset().filter(title=query)
-        # else:
-        #    sqs = self.searchqueryset().all()
-        #=======================================================================
-
-        #for word in iter(set(query.split())):
-        #    sqs = sqs.filter_or(title=word).filter_or(text=word)
-
+        sqs = self.searchqueryset().models(Book)\
+                        .filter(SQ(content_auto=detranslited_query) 
+                                | SQ(content_auto=translited_query) 
+                                | SQ(content_auto=query))
+        
+        #sqs = self.searchqueryset().auto_query(query)
+        
         if self.load_all:
             sqs = sqs.load_all()
         
