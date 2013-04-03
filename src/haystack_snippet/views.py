@@ -61,9 +61,9 @@ class HaystackSearchView(SearchView):
         translited_query = translify(query)
         detranslited_query = detranslify(query).encode('utf-8')
         
-        sqs = self.searchqueryset().filter(SQ(content_auto=detranslited_query) 
-                                | SQ(content_auto=translited_query) 
-                                | SQ(content_auto=query))
+        sqs = self.searchqueryset().filter(SQ(content=detranslited_query) 
+                                | SQ(content=translited_query) 
+                                | SQ(content=query))
         
         #sqs = self.searchqueryset().auto_query(query)
         
