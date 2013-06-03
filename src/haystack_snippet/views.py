@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.db.models import F
 from django.conf import settings
+from django.utils.encoding import force_unicode
 
 from pytils.translit import detranslify, translify
 from haystack.views import SearchView
@@ -58,8 +59,8 @@ class HaystackSearchView(SearchView):
             if not rows:
                 SearchLogger.objects.create(text=query)
         
-        translited_query = translify(query)
-        detranslited_query = detranslify(query).encode('utf-8')
+        translited_query = force_unicode(translify(query))
+        detranslited_query = force_unicode(detranslify(query))
         
         sqs = self.searchqueryset().filter(SQ(content=detranslited_query) 
                                 | SQ(content=translited_query) 
