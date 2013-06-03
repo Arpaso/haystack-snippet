@@ -45,10 +45,10 @@ class HaystackSearchView(SearchView):
 
         Returns an empty list if there's no query to search with.
         """
-        if not (self.form.is_valid() and self.form.cleaned_data['q']):
-            return self.form.no_query_found()
+        query = self.query
 
-        query = self.form.cleaned_data['q']
+        if not (self.form.is_valid() and query):
+            return self.form.no_query_found()
 
         #Replace letter ё --> е
         query = replace_special(query)
@@ -62,9 +62,7 @@ class HaystackSearchView(SearchView):
         translited_query = force_unicode(translify(query))
         detranslited_query = force_unicode(detranslify(query))
         
-        sqs = self.searchqueryset().filter(SQ(content=detranslited_query) 
-                                | SQ(content=translited_query) 
-                                | SQ(content=query))
+        sqs = self.searchqueryset().filter_and(SQ(content=detranslited_query) | SQ(content=translited_query) | SQ(content=query))
         
         #sqs = self.searchqueryset().auto_query(query)
         
